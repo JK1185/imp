@@ -1,0 +1,17 @@
+https://chicago-ciords.accenture.com - Latest
+
+https://azurebastion.accenture.com/RDWeb/Pages/en-US/login.aspx  OLD 
+
+VA518718.dir.svc.accenture.com (Normal)
+
+VD106221.dir.svc.accenture.com  (CIO Server)
+
+https://azr-rds.accenture.com/RDWeb/Pages/en-US/default.aspx  New No Call
+
+ 
+
+Joris Meys - StackOverflow
+
+SELECT COLUMN_NAME, TABLE_NAME 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME LIKE '%SORTReportDataHistorical%'

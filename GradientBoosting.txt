@@ -1,0 +1,16 @@
+Gradient boosting - 
+http://uc-r.github.io/gbm_regression 
+
+Adaboost
+https://www.youtube.com/watch?v=LsK-xG1cLYA&feature=youtu.be
+
+Example using H2o 
+http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/algo-params/class_sampling_factors.html
+
+Regression
+https://www.youtube.com/watch?v=3CC4N4z3GJc
+https://www.youtube.com/watch?v=2xudPOBz-vs
+
+Classification
+https://www.youtube.com/watch?v=jxuNLH5dXCs
+https://www.youtube.com/watch?v=StWY5QWMXCw
