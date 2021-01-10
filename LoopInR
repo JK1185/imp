@@ -1,0 +1,81 @@
+set.seed(3033)#3033#1234
+intrain <- createDataPartition(y = dt2$Approach2, p= 0.7, list = FALSE)
+head(intrain)
+training_dt <- dt2[intrain,]
+testing_dt <- dt2[-intrain,]
+
+testing_flag <- testing_dt$Approach2
+
+modellist<-list() 
+# modellistXX <- list()
+# modellistYY <- list()
+
+train_performance <- data.frame('TN'=0,'FP'=0,'FN'=0,'TP'=0,'accuracy'=0,'kappa'=0,'sensitivity'=0,'specificity'=0,"Key" =0)
+test_performance <- data.frame('TN'=0,'FP'=0,'FN'=0,'TP'=0,'accuracy'=0,'kappa'=0,'sensitivity'=0,'specificity'=0,"Key" =0)
+
+
+final_train <- list()
+final_test <- list()
+
+
+for(ntree in c(500,600,700,800,900,1000)){ #,700,800,900,1000,1100,1200
+  for (mtry in c(5,10)){
+    for (nodesize in c(2:6)){
+      for(seed in c(1)){
+      set.seed(seed)
+      fit <-randomForest(Approach2 ~ ., data=training_dt,mtry = mtry,
+                         importance=TRUE, proximity=TRUE, na.action = na.omit, ntree= ntree,
+                         replace = FALSE,sampsize=c(500, 200),nodesize = nodesize)
+      
+      key1<-paste0("ntree -",ntree,",mtry -",mtry,",nodesize -",nodesize,",seed -",seed)
+      modellist[[key1]]<-fit
+      
+      # imp <- randomForest :: importance(fit) 
+      # imp = as.data.frame(imp)
+      # train_cols = rownames(imp)
+      
+      pred_train <- predict(fit, training_dt)
+      cf <- confusionMatrix(pred_train, training_dt$Approach2, mode = 'everything', positive = '1')
+      train_performance$TN <- cf$table[1]
+      train_performance$FP <- cf$table[2]
+      train_performance$FN <- cf$table[3]
+      train_performance$TP <- cf$table[4]
+      train_performance$accuracy=cf$overall[1]
+      train_performance$kappa=cf$overall[2]
+      train_performance$sensitivity=cf$byClass[1]
+      train_performance$specificity=cf$byClass[2]
+      train_performance$Key = key1
+      final_train <- rbind(final_train,train_performance)
+      
+      pred_test <- predict(fit, testing_dt)
+      cf <- confusionMatrix(pred_test, testing_dt$Approach2, mode = 'everything', positive = '1')
+      test_performance$TN <- cf$table[1]
+      test_performance$FP <- cf$table[2]
+      test_performance$FN <- cf$table[3]
+      test_performance$TP <- cf$table[4]
+      test_performance$accuracy=cf$overall[1]
+      test_performance$kappa=cf$overall[2]
+      test_performance$sensitivity=cf$byClass[1]
+      test_performance$specificity=cf$byClass[2]
+      test_performance$Key = key1
+      final_test <- rbind(final_test,test_performance)
+      
+      } }}}     
+      
+      
+      # pdresp <- predict(fit, training_dt[,train_cols], type="response")
+      # xtab = table(pdresp, training_dt$Approach2)
+      # XX = confusionMatrix(xtab, positive = "1")
+      # modellistXX[[key]]<- XX
+      # 
+      # pdresp <- predict(fit, testing_dt[,train_cols], type="response")
+      # xtab = table(pdresp, testing_dt$Approach2)
+      # YY = confusionMatrix(xtab, positive = "1")
+      # modellistYY[[key]]<- YY
+      
+      
+  
+
+
+
+write.csv(final_test,"final_test.csv")
